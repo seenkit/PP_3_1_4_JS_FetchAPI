@@ -3,57 +3,44 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.User;
+import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
-import javax.validation.Valid;
+import java.security.Principal;
 
 @Controller
 public class UsersController {
 
-    private UserService userService;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/admin")
-    public String showAllUsers(Model model) {
+    public String showAllUsers(Principal principal, Model model) {
         model.addAttribute("allUsers", userService.getAllUsers());
+        model.addAttribute("principalUser", userService.getUserByUsername(principal.getName()));
+        model.addAttribute("newUser", new User());
+        model.addAttribute("allRoles", roleService.getAllRoles());
         return "allUsers";
     }
 
-    @GetMapping("/admin/add-new-user")
-    public String getNewUserForm(Model model) {
-        model.addAttribute("newUser", new User());
-        return "addUserForm";
-    }
-
     @PostMapping("/admin")
-    public String addNewUser(@ModelAttribute("newUser") @Valid User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "addUserForm";
-        }
-        userService.addUser(user);
+    public String addNewUser(@ModelAttribute("newUser") User user, @RequestParam(value = "role") int role) {
+        userService.addUser(user, role);
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/user/{id}/edit-user")
-    public String getEditUserForm(Model model, @PathVariable("id") int id) {
-        model.addAttribute("editUser", userService.getUserById(id));
-        return "/editUserForm";
-    }
-
     @PatchMapping("/admin/user/{id}")
-    public String editUser(@ModelAttribute("editUser") @Valid User user, BindingResult bindingResult,
-                           @PathVariable("id") int id) {
-        if (bindingResult.hasErrors()) {
-            return "/editUserForm";
-        }
-        userService.editUser(user, id);
+    public String editUser(@ModelAttribute("user") User user,
+                           @RequestParam(value = "role") int role, @PathVariable("id") int id) {
+        userService.editUser(user, id, role);
         return "redirect:/admin";
     }
 
@@ -68,4 +55,6 @@ public class UsersController {
         model.addAttribute("user", userService.getUserByUsername(username));
         return "showUser";
     }
+
+
 }

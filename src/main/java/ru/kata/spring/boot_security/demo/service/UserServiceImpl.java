@@ -8,15 +8,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
 import ru.kata.spring.boot_security.demo.model.User;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final RoleService roleService;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, RoleService roleService) {
         this.userDao = userDao;
+        this.roleService = roleService;
     }
 
     @Transactional(readOnly = true)
@@ -32,8 +35,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void addUser(User user) {
-        userDao.addUser(user);
+    public void addUser(User user, int role) {
+        user.setRoles(Collections.singletonList(roleService.getRoleById(role)));
+        userDao.addUser(user, role);
     }
 
     @Transactional(readOnly = true)
@@ -56,8 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void editUser(User user, int id) {
-        userDao.editUser(user, id);
+    public void editUser(User user, int id, int role) {
+        user.setRoles(Collections.singletonList(roleService.getRoleById(role)));
+        userDao.editUser(user, id, role);
     }
 
     @Transactional

@@ -1,6 +1,10 @@
 package ru.kata.spring.boot_security.demo.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
@@ -15,7 +19,7 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     @Override
-    public void addUser(User user) {
+    public void addUser(User user, int role) {
         entityManager.persist(user);
     }
 
@@ -31,17 +35,19 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByUsername(String username) {
-        return entityManager.createQuery("select u from User u where u.username= :username", User.class)
-                .setParameter("username", username).getSingleResult();
+        return entityManager.createQuery("select u from User u where u.email= :email", User.class)
+                .setParameter("email", username).getSingleResult();
     }
 
     @Override
-    public void editUser(User editUser, int id) {
+    public void editUser(User editUser, int id, int role) {
         User user = getUserById(id);
         user.setFirstName(editUser.getFirstName());
         user.setLastName(editUser.getLastName());
         user.setAge(editUser.getAge());
         user.setEmail(editUser.getEmail());
+        user.setPassword(editUser.getPassword());
+        user.setRoles(editUser.getRoles());
     }
 
     @Override

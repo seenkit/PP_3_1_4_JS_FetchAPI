@@ -1,73 +1,84 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
-  <meta charset="UTF-8">
-  <title th:text="${user.username}"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title>All Users</title>
 </head>
 <body>
 
-<br/>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <p class="navbar-brand text-white">
+            <b><span class="align-middle" th:text="${user.email}"></span></b>
+            <span class="align-middle">with roles:</span>
+            <span class="align-middle" th:text="${user.getRole()}"></span>
+        </p>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn btn-dark text-secondary float-right">Logout</button>
+        </form>
+    </div>
+</nav>
 
-<style type="text/css">
-  .table {
-    width: 100%;
-    margin-bottom: 20px;
-    border: 5px solid #fff;
-    border-top: 5px solid #fff;
-    border-bottom: 3px solid #fff;
-    border-collapse: collapse;
-    outline: 3px solid #ffffff;
-    font-size: 15px;
-    background: #fff!important;
-  }
-  .table th {
-    font-weight: bold;
-    padding: 7px;
-    background: rgba(79, 75, 75, 0.67);
-    border: none;
-    text-align: left;
-    font-size: 15px;
-    border-top: 3px solid #fff;
-    border-bottom: 3px solid #ffffff;
-  }
-  .table td {
-    padding: 7px;
-    border: none;
-    border-top: 3px solid #fff;
-    border-bottom: 3px solid #fff;
-    font-size: 15px;
-  }
-  .table tbody tr:nth-child(even){
-    background: #f8f8f8!important;
-  }
-</style>
-
-<table class="table">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Age</th>
-    <th>Email</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="user : ${user}">
-    <td th:text="${user.id}">id</td>
-    <td th:text="${user.firstName}">firstName</td>
-    <td th:text="${user.lastName}">lastName</td>
-    <td th:text="${user.age}">age</td>
-    <td th:text="${user.email}">email</td>
-  </tr>
-  </tbody>
-</table>
-
-<br>
-
-<form th:method="get" th:action="@{/logout}">
-  <input type="submit" value="Logout">
-</form>
-
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="p-0 col-2">
+                <div class="nav flex-column nav-pills pt-4" aria-orientation="vertical">
+                    <div sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/admin}">Admin</a>
+                </div>
+                    <a class="nav-link active" href="">User</a>
+                </div>
+            </div>
+            <div class="col bg-light p-3">
+                <h1 class="m-3 fw-bold">User information-page</h1>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="card">
+                            <h5 class="card-header">About user</h5>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>Age</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td th:text="${user.id}">id</td>
+                                        <td th:text="${user.firstName}">firstName</td>
+                                        <td th:text="${user.lastName}">lastName</td>
+                                        <td th:text="${user.age}">age</td>
+                                        <td th:text="${user.email}">email</td>
+                                        <td th:text="${user.getRole()}">role</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 </body>
 </html>
