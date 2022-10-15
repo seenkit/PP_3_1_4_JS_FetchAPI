@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(User user, int role) {
         user.setRoles(Collections.singletonList(roleService.getRoleById(role)));
-        userDao.addUser(user, role);
+        userDao.addUser(user);
     }
 
     @Transactional(readOnly = true)
@@ -60,9 +60,9 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void editUser(User user, int id, int role) {
+    public void editUser(User user, int role) {
         user.setRoles(Collections.singletonList(roleService.getRoleById(role)));
-        userDao.editUser(user, id, role);
+        userDao.editUser(user);
     }
 
     @Transactional
