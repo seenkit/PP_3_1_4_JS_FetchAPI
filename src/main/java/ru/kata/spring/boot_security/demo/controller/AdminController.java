@@ -11,13 +11,13 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import java.security.Principal;
 
 @Controller
-public class UsersController {
+public class AdminController {
 
     private final UserService userService;
     private final RoleService roleService;
 
     @Autowired
-    public UsersController(UserService userService, RoleService roleService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
@@ -32,14 +32,14 @@ public class UsersController {
     }
 
     @PostMapping("/admin")
-    public String addNewUser(@ModelAttribute("newUser") User user, @RequestParam(value = "role") int role) {
+    public String addNewUser(@ModelAttribute("newUser") User user, @RequestParam(value = "role") String[] role) {
         userService.addUser(user, role);
         return "redirect:/admin";
     }
 
     @PatchMapping("/admin/user/{id}")
     public String editUser(@ModelAttribute("user") User user,
-                           @RequestParam(value = "role") int role) {
+                           @RequestParam(value = "role") String[] role) {
         userService.editUser(user, role);
         return "redirect:/admin";
     }
@@ -49,12 +49,4 @@ public class UsersController {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
-
-    @GetMapping("/user/{username}")
-    public String showUser(Model model, @PathVariable("username") String username) {
-        model.addAttribute("user", userService.getUserByUsername(username));
-        return "showUser";
-    }
-
-
 }

@@ -6,9 +6,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserDao;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,8 +36,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void addUser(User user, int role) {
-        user.setRoles(Collections.singletonList(roleService.getRoleById(role)));
+    public void addUser(User user, String[] role) {
+        List<Role> roles = new ArrayList<>();
+        for (int i = 0; i < role.length; i++) {
+            roles.add(roleService.getRoleByName(role[i]));
+        }
+        user.setRoles(roles);
         userDao.addUser(user);
     }
 
@@ -60,8 +65,12 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void editUser(User user, int role) {
-        user.setRoles(Collections.singletonList(roleService.getRoleById(role)));
+    public void editUser(User user, String[] role) {
+        List<Role> roles = new ArrayList<>();
+            for (int i = 0; i < role.length; i++) {
+                roles.add(roleService.getRoleByName(role[i]));
+            }
+        user.setRoles(roles);
         userDao.editUser(user);
     }
 

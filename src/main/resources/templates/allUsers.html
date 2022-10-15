@@ -138,7 +138,7 @@
                                                                                 class="form-control form-control-sm"
                                                                                 id="editRole" name="role" size="2" required>
                                                                             <option th:each="role : ${allRoles}"
-                                                                                    th:value="${role.id}"
+                                                                                    th:value="${role.role}"
                                                                                     th:text="${role.toString()}">
                                                                         </select>
                                                                     </div>
@@ -268,7 +268,7 @@
                                             <label for="newRole"><b>Role</b></label>
                                             <select multiple class="form-control form-control-sm" id="newRole"
                                                     name="role" size="2" required>
-                                                <option th:each="role : ${allRoles}" th:value="${role.id}"
+                                                <option th:each="role : ${allRoles}" th:value="${role.role}"
                                                         th:text="${role.toString()}">
                                             </select>
                                         </div>
