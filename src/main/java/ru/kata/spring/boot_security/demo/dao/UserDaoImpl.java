@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,7 @@ public class UserDaoImpl implements UserDao {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     @Override
     public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -46,6 +48,7 @@ public class UserDaoImpl implements UserDao {
                 .setParameter("email", username).getSingleResult();
     }
 
+    @Transactional
     @Override
     public void editUser(User user) {
         entityManager.merge(user);

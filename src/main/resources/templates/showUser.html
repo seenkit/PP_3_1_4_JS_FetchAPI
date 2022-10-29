@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title>All Users</title>
+    <title>User</title>
 </head>
 <body>
 
 <nav class="navbar navbar-dark bg-dark">
     <div class="container-fluid">
         <p class="navbar-brand text-white">
-            <b><span class="align-middle" th:text="${user.email}"></span></b>
+            <b><span class="align-middle" id="navUserEmail"></span></b>
             <span class="align-middle">with roles:</span>
-            <span class="align-middle" th:text="${user.getRole()}"></span>
+            <span class="align-middle" id="navUserRoles"></span>
         </p>
         <form th:action="@{/logout}" method="post">
             <button type="submit" class="btn btn-dark text-secondary float-right">Logout</button>
@@ -29,7 +29,7 @@
             <div class="p-0 col-2">
                 <div class="nav flex-column nav-pills pt-4" aria-orientation="vertical">
                     <div sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link" th:href="@{/admin}">Admin</a>
+                    <a class="nav-link" href="/admin">Admin</a>
                 </div>
                     <a class="nav-link active" href="">User</a>
                 </div>
@@ -52,15 +52,8 @@
                                         <th>Role</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td th:text="${user.id}">id</td>
-                                        <td th:text="${user.firstName}">firstName</td>
-                                        <td th:text="${user.lastName}">lastName</td>
-                                        <td th:text="${user.age}">age</td>
-                                        <td th:text="${user.email}">email</td>
-                                        <td th:text="${user.getRole()}">role</td>
-                                    </tr>
+                                    <tbody id="tbodyUser">
+
                                     </tbody>
                                 </table>
                             </div>
@@ -71,6 +64,7 @@
         </div>
     </div>
 </section>
+<script type="text/javascript" src="/main.js"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>

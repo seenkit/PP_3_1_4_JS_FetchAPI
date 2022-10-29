@@ -21,20 +21,29 @@ public class User implements UserDetails {
     private int id;
 
     @Column(name = "first_name")
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 20, message = "Имя должно содержать от 2 до 20 символов")
     private String firstName;
 
     @Column(name = "last_name")
+    @NotEmpty(message = "Фамилия не должна быть пустой")
+    @Size(min = 2, max = 20, message = "Фамилия должна содержать от 2 до 20 символов")
     private String lastName;
 
     @Column(name = "age")
+    @Min(value = 18, message = "Минимальный возраст 18")
+    @Max(value = 90, message = "Максимальный возраст 90")
     private int age;
 
     @Column(name = "email", unique = true)
+    @NotEmpty(message = "Email не должен быть пустым")
+    @Email
     private String email;
 
     @Column(name = "password")
     private String password;
 
+    @NotEmpty
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
@@ -44,7 +53,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String firstName, String lastName, int age, String email, String password) {
+    public User(String firstName, String lastName, int age, String email, String password, List<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;

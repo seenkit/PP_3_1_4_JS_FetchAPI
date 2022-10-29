@@ -9,6 +9,8 @@ import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class Init {
@@ -31,13 +33,17 @@ public class Init {
         roleService.addRole(role1);
         roleService.addRole(role2);
 
-        String[] adminRoles = {"ROLE_ADMIN", "ROLE_USER"};
-        String[] userRoles = {"ROLE_USER"};
+        List<Role> adminRoles = new ArrayList<>();
+        adminRoles.add(role1);
+        adminRoles.add(role2);
 
-        User user1 = new User("Admin", "Admin", 100, "admin@gmail.com", "admin");
-        User user2 = new User("User", "User", 10, "user@mail.ru", "user");
+        List<Role> userRoles = new ArrayList<>();
+        userRoles.add(role2);
 
-        userService.addUser(user1, adminRoles);
-        userService.addUser(user2, userRoles);
+        User user1 = new User("Admin", "Admin", 90, "admin@gmail.com", "admin", adminRoles);
+        User user2 = new User("User", "User", 18, "user@mail.ru", "user", userRoles);
+
+        userService.addUser(user1);
+        userService.addUser(user2);
     }
 }
